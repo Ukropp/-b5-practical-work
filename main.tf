@@ -24,9 +24,8 @@ resource "yandex_vpc_subnet" "subnet" {
 }
 
 # Целевая группа
-resource "yandex_lb_target_group" "lamp-lemp" {
-  name      = "my-target-group"
-  region_id = var.zone
+resource "yandex_lb_target_group" "lamp" {
+  name = "my-target-group"
 
   target {
     subnet_id = yandex_vpc_subnet.subnet.id
@@ -39,12 +38,12 @@ resource "yandex_lb_target_group" "lamp-lemp" {
   }
 }
 # Балансировщик
-resource "yandex_lb_network_load_balancer" "lamp-lemp" {
+resource "yandex_lb_network_load_balancer" "lamp" {
   name        = "my-network-load-balancer"
   description = "balancer for my instances"
 
   listener {
-    name = "lamp-lemp balancer"
+    name = "lamp-lemp-balancer"
     port = 80
     external_address_spec {
       ip_version = "ipv4"
@@ -52,7 +51,7 @@ resource "yandex_lb_network_load_balancer" "lamp-lemp" {
   }
 
   attached_target_group {
-    target_group_id = yandex_lb_target_group.lamp-lemp.id
+    target_group_id = yandex_lb_target_group.lamp.id
     healthcheck {
       name = "http"
       http_options {
