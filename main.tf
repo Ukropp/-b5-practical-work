@@ -43,8 +43,16 @@ resource "yandex_lb_network_load_balancer" "lamp" {
   description = "balancer for my instances"
 
   listener {
-    name = "lamp-lemp-balancer"
+    name = "lamp-lemp-http"
     port = 80
+    external_address_spec {
+      ip_version = "ipv4"
+    }
+  }
+
+  listener {
+    name = "lamp-lemp-https"
+    port = 443
     external_address_spec {
       ip_version = "ipv4"
     }
@@ -56,7 +64,7 @@ resource "yandex_lb_network_load_balancer" "lamp" {
       name = "http"
       http_options {
         port = 80
-        path = "/ping"
+        path = "/"
       }
     }
   }
